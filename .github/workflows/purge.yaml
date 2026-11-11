@@ -11,20 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v7
-      with:
-        submodules: false
-        fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
-    - name: Install python requirements
-      run: |
-        sudo apt-get install libmagic1
-        pip install -r requirements.txt
-        mkdir archive
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
 
-    - name: Purge skeets
-      env:
-        BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
-        BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
-      run: |
-        python skeeter_deleter.py -s 2 -v -y
+      - uses: actions/checkout@v7
+        with:
+          submodules: false
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Install python requirements
+        run: |
+          sudo apt-get install libmagic1
+          pip install -r requirements.txt
+          mkdir archive
+
+      - name: Purge skeets
+        env:
+          BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
+          BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+        run: |
+          python skeeter_deleter.py -s 2 -v -y
